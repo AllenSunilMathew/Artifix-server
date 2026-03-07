@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import connectDB from './db.js';
 
 dotenv.config();
 
@@ -171,8 +172,7 @@ const seedAdmin = async () => {
 // ── Connect & Start ──────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 
-mongoose
-  .connect(process.env.DBCONNECTIONSTRING)
+connectDB()
   .then(() => {
     console.log('✅ MongoDB connected');
     seedAdmin();
