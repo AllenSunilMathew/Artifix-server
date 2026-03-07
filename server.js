@@ -50,10 +50,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+ app.get("/", (req, res) => {
+  res.send(" Artifix API is running successfully");
+});
+
+
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({ message: `Route ${req.originalUrl} not found` });
 });
+
+
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -177,3 +184,4 @@ mongoose
     console.error('❌ MongoDB connection failed:', err.message);
     process.exit(1);
   });
+ 
