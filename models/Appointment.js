@@ -7,7 +7,6 @@ const appointmentSchema = new mongoose.Schema(
     appointmentDate: { type: Date, required: true },
     appointmentTime: { type: String, required: true },
     tokenNumber: { type: String, required: true },
-    qrCode: { type: String, default: '' },
     status: {
       type: String,
       enum: ['pending', 'confirmed', 'completed', 'cancelled', 'expired', 'no_show'],

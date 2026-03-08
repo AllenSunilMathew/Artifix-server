@@ -1,5 +1,4 @@
 import express from 'express';
-import QRCode from 'qrcode';
 import Appointment from '../models/Appointment.js';
 import User from '../models/User.js';
 import { protect, authorize } from '../middleware/auth.js';
@@ -83,23 +82,12 @@ router.post('/', authorize('patient'), async (req, res) => {
 
     const tokenNumber = await getNextToken(doctorId, appointmentDate);
 
-    // Build QR data - keep it short for scanner compatibility
-    const qrPayload = JSON.stringify({
-      t: tokenNumber,
-      d: appointmentDate,
-      tm: appointmentTime,
-      p: req.user.phone,
-      dr: doctor.name.substring(0, 20), // Limit doctor name
-    });
-    const qrCode = await QRCode.toDataURL(qrPayload, { width: 300, margin: 2 });
-
     const appointment = await Appointment.create({
       patient: req.user._id,
       doctor: doctorId,
       appointmentDate: new Date(appointmentDate),
       appointmentTime,
       tokenNumber,
-      qrCode,
       symptoms: symptoms || '',
       notes: notes || '',
       status: 'confirmed',
