@@ -88,7 +88,7 @@ router.post('/', authorize('patient'), async (req, res) => {
       t: tokenNumber,
       d: appointmentDate,
       tm: appointmentTime,
-      p: patient.phone,
+      p: req.user.phone,
       dr: doctor.name.substring(0, 20), // Limit doctor name
     });
     const qrCode = await QRCode.toDataURL(qrPayload, { width: 300, margin: 2 });

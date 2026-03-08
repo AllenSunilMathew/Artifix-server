@@ -56,15 +56,22 @@ router.post('/', authorize('doctor'), async (req, res) => {
 // @access Patient (own), Doctor, Admin
 router.get('/patient/:patientId', async (req, res) => {
   try {
+    const { patientId } = req.params;
+    
+    // Validate patientId
+    if (!patientId || patientId === 'undefined' || patientId === 'null') {
+      return res.status(400).json({ message: 'Invalid patient ID provided' });
+    }
+
     // Patient can only access their own
     if (
       req.user.role === 'patient' &&
-      req.user._id.toString() !== req.params.patientId
+      req.user._id.toString() !== patientId
     ) {
       return res.status(403).json({ message: 'Access denied' });
     }
 
-    const prescriptions = await Prescription.find({ patient: req.params.patientId })
+    const prescriptions = await Prescription.find({ patient: patientId })
       .populate('doctor', 'name specialization department profilePicture')
       .populate('appointment', 'appointmentDate appointmentTime tokenNumber')
       .sort({ createdAt: -1 });
